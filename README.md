@@ -7,7 +7,17 @@ Lab d'administration réseau : **pfSense + Webmin sous VirtualBox**
 - [Objectifs](#objectifs)
 - [Architecture du lab](#architecture-du-lab)
 - [Partie 1 : Webmin](#partie-1--webmin)
+  - [Présentation](#présentation-de-webmin)
+  - [Préparation du travail](#préparation-du-travail)
+  - [Accès à l'interface Webmin](#accès-à-linterface-webmin)
+  - [Informations système affichées](#informations-système-affichées)
+  - [Détails techniques](#détails-techniques)
+  - [Menu Webmin](#explication-des-éléments-du-menu-webmin)
 - [Partie 2 : pfSense](#partie-2--pfsense)
+  - [Lancement des VMs](#après-linstallation-lancer-les-vms)
+  - [Accès à l'interface web](#accès-à-linterface-web)
+  - [Règles Firewall](#règles-firewall)
+  - [NAT et redirection de port](#nat-et-redirection-de-port)
 - [Technologies utilisées](#technologies-utilisées)
 
 ---
@@ -44,21 +54,19 @@ Lab d'administration réseau : **pfSense + Webmin sous VirtualBox**
 
 ## Présentation de Webmin
 
-&gt; Webmin est un outil d'administration système accessible via navigateur.
-&gt; Il permet de gérer les utilisateurs, services, réseaux, pare-feu, sauvegardes, etc.
-&gt; Interface d'accès : `https://&lt;IP&gt;:10000`
+> Webmin est un outil d'administration système accessible via navigateur.
+> Il permet de gérer les utilisateurs, services, réseaux, pare-feu, sauvegardes, etc.
+> Interface d'accès : `https://<IP>:10000`
 
 ## Préparation du travail
 
-![Préparation du travail](images/Pr%C3%A9paration%20du%20travail.png)
+*(voir captures dans le dossier [`images/`](images/))*
 
 ## Accès à l'interface Webmin
 
-Connexion via `https://&lt;IP&gt;:10000` depuis le navigateur.
+Connexion via `https://<IP>:10000` depuis le navigateur.
 
-![Accès à l'interface Webmin](images/Acc%C3%A8s%20%C3%A0%20l'interface%20Webmin.png)
-
-![Accès à l'interface Webmin 2](images/Acc%C3%A8s%20%C3%A0%20l'interface%20Webmin2.png)
+*(voir captures dans le dossier [`images/`](images/))*
 
 ## Informations système affichées
 
@@ -100,11 +108,9 @@ Connexion via `https://&lt;IP&gt;:10000` depuis le navigateur.
 
 ## Après l'installation, lancer les VMs
 
-![Lancement des VMs](images/Apr%C3%A8s%20l'installation,%20lancer%20les%20VMs.png)
+Lancer pfSense, puis redémarrer la VM Kali Linux.
 
-Redémarrer ensuite la VM Kali Linux.
-
-![Redémarrage de Kali Linux](images/apr%C3%A8s%20red%C3%A9marrer%20le%20VM%20kali-linux.png)
+*(voir captures dans le dossier [`images/`](images/))*
 
 ## Accès à l'interface web
 
@@ -113,7 +119,7 @@ Redémarrer ensuite la VM Kali Linux.
 3. Accéder à **https://192.168.1.51** depuis Ubuntu, se connecter (`admin / pfsense`).
 4. Suivre l'assistant (hostname : `pfsense`, timezone : `Africa/Algiers`, etc.) et **changer le mot de passe admin**.
 
-![Interface web pfSense](images/Acc%C3%A8s%20%C3%A0%20l'interface%20web.jpg)
+![Interface pfSense](images/pfsense-web.png)
 
 ## Règles Firewall
 
@@ -129,3 +135,25 @@ Redémarrer ensuite la VM Kali Linux.
 1. Installer Apache2 sur Ubuntu :
    ```bash
    sudo apt install apache2 -y
+   ```
+2. Dans pfSense, ajouter une redirection de port (**Firewall → NAT → Port Forward**) :
+   - **Interface** : WAN
+   - **Port externe** : 8080
+   - **IP interne** : Ubuntu
+   - **Port interne** : 80
+3. Depuis l'hôte physique, tester HTTP sur `http://[IP WAN pfSense]:8080` — la page par défaut du serveur Ubuntu doit s'afficher.
+
+---
+
+## Technologies utilisées
+
+- **pfSense** — firewall / routeur
+- **Webmin 2.600** — administration système via interface web
+- **Ubuntu Server 24.04.3** — serveur Linux
+- **Kali Linux** — machine de test
+- **VirtualBox** — virtualisation (VMnet0 / VMnet2)
+- **Apache2** — serveur web de test (NAT)
+
+---
+
+*Projet réalisé dans le cadre du cours Administration Systèmes et Réseaux.*
